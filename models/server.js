@@ -1,80 +1,75 @@
-const express = require('express');
-const cors = require('cors');
-const fileUpload = require('express-fileupload');
+const express = require("express");
+const cors = require("cors");
+const { dbConnection } = require('../database/config')
+const fileUpload = require('express-fileupload')
 
-const { dbConnection } = require('../database/config');
 
 class Server {
 
-    constructor() {
-        this.app  = express();
+    constructor () {
+        this.app = express();
         this.port = process.env.PORT;
 
         this.paths = {
-            auth:       '/api/auth',
-            buscar:     '/api/buscar',
-            categorias: '/api/categorias',
-            productos:  '/api/productos',
-            usuarios:   '/api/usuarios',
-            uploads:    '/api/uploads',
+            user :       '/api/users',
+            auth :       '/api/auth',
+            categories : '/api/categories',
+            products:    '/api/products',
+            find:        '/api/find',
+            uploads: '/api/uploads'
         }
 
+        // Connect to DATABASE
+        this.connectDB();
 
-        // Conectar a base de datos
-        this.conectarDB();
 
-        // Middlewares
+        //midlewares: es como una funcion que siempre se ejecute
         this.middlewares();
 
-        // Rutas de mi aplicación
-        this.routes();
-    }
 
-    async conectarDB() {
+        //app routes
+        this.routes();
+    };
+
+    async connectDB() {
         await dbConnection();
     }
 
-
     middlewares() {
 
-        // CORS
-        this.app.use( cors() );
+        this.app.use(cors()) //use CORS
 
-        // Lectura y parseo del body
+        // parse and read body
         this.app.use( express.json() );
 
-        // Directorio Público
+        //directorio public
         this.app.use( express.static('public') );
 
-        // Fileupload - Carga de archivos
-        this.app.use( fileUpload({
+        // file upload
+        this.app.use(fileUpload({
             useTempFiles : true,
             tempFileDir : '/tmp/',
             createParentPath: true
         }));
-
     }
 
-    routes() {
+    routes () {
+
+        this.app.use( this.paths.auth, require('../routes/auth')); //the last is the file localited in routes/auth
+        this.app.use( this.paths.user, require('../routes/user'));
+        this.app.use( this.paths.categories, require( '../routes/categories'));
+        this.app.use( this.paths.products, require( '../routes/products'));
+        this.app.use( this.paths.find, require( '../routes/find'));
+        this.app.use( this.paths.uploads, require( '../routes/uploads'));
+
         
-        this.app.use( this.paths.auth, require('../routes/auth'));
-        this.app.use( this.paths.buscar, require('../routes/buscar'));
-        this.app.use( this.paths.categorias, require('../routes/categorias'));
-        this.app.use( this.paths.productos, require('../routes/productos'));
-        this.app.use( this.paths.usuarios, require('../routes/usuarios'));
-        this.app.use( this.paths.uploads, require('../routes/uploads'));
-        
+
     }
 
     listen() {
-        this.app.listen( this.port, () => {
-            console.log('Server running on port:', this.port );
-        });
+        this.app.listen(this.port);
     }
 
 }
-
-
-
 
 module.exports = Server;

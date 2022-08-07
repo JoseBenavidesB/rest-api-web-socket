@@ -1,29 +1,29 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
+const { uploadFiles, updateImagen, showImages, updateImagenCloudinary } = require('../controllers/uploads');
+const { validCollection } = require('../helpers');
+const { validateUploadedFile } = require('../middlewares')
 
-const { validarCampos, validarArchivoSubir } = require('../middlewares');
-const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenCloudinary } = require('../controllers/uploads');
-const { coleccionesPermitidas } = require('../helpers');
-
+const { fieldValidate } = require('../middlewares/field-validate');
 
 const router = Router();
 
 
-router.post( '/', validarArchivoSubir, cargarArchivo );
 
-router.put('/:coleccion/:id', [
-    validarArchivoSubir,
-    check('id','El id debe de ser de mongo').isMongoId(),
-    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios','productos'] ) ),
-    validarCampos
-], actualizarImagenCloudinary )
-// ], actualizarImagen )
+router.post('/', validateUploadedFile,uploadFiles);
 
-router.get('/:coleccion/:id', [
-    check('id','El id debe de ser de mongo').isMongoId(),
-    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios','productos'] ) ),
-    validarCampos
-], mostrarImagen  )
+router.put('/:collection/:id', [
+    validateUploadedFile,
+    check( 'id', 'Id must be MongoId').isMongoId(),
+    check('collection').custom( c => validCollection( c, ['products', 'users'] ) ),
+    fieldValidate
+], updateImagenCloudinary);
+
+router.get( '/:collection/:id', [
+    check( 'id', 'Id must be MongoId').isMongoId(),
+    check('collection').custom( c => validCollection( c, ['products', 'users'] ) ),
+    fieldValidate
+], showImages);
 
 
 
