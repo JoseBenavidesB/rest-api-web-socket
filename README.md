@@ -1,5 +1,5 @@
-# An API REST with Node.js + Chat using Socket.io
-A REST-API about a Coffee store, with user, products, categories models. You can login using Google Signin You can upload images about a User or product.
+# An API REST with Node.js that's include a Chat using Socket.io
+A REST-API about a Coffee store, with user, products, categories models. You can login using Google Signin. You can upload images about a User or product. And you can use a global room to chat, or private room to chat with a specific user.
 
 ## Used technologies:
 -Node.js
