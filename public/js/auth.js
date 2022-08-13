@@ -1,3 +1,4 @@
+/* --------HTML References---------- */
 const myForm = document.querySelector('form'); // Login form
 
 /* -------- SIGN IN ---------------- */
@@ -26,6 +27,7 @@ myForm.addEventListener('submit', e => {
             return console.error(msg);
         }
         localStorage.setItem('token', token)
+        window.location = 'chat.html';
         console.log('success');
     })
     .catch( err => {
@@ -52,7 +54,11 @@ function onSignIn(googleUser) {
     })
         .then(resp => resp.json())
         .then(({ token }) => {
+            if( msg ) {
+                return console.error(msg);
+            }
             localStorage.setItem('token', token);
+            window.location = 'chat.html';
         })
         .catch(console.log)
 }
