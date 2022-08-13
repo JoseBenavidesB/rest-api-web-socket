@@ -9,34 +9,36 @@
     <title>Socket Chat </title>
 </head>
 <body class="container mt-4">
-    <!-- -------fIRST div-------- -->
-    <div class="col-md-6 col-sm-6">
-        <h3>Send message</h3> <hr>
-        <input  type="text"
-                id="txtUid"
-                class="form-control mb-2"
-                placeholder="User id"
-                autocapitalize="off"
-        >
+    <div class="row">
+        <!-- -------fIRST div-------- -->
+        <div class="col-sm-6">
+            <h3>Send message</h3> <hr>
+            <input  type="text"
+                    id="txtUid"
+                    class="form-control mb-2"
+                    placeholder="User id"
+                    autocapitalize="off"
+            >
 
-        <input  type="text"
-                id="txtMessage"
-                class="form-control mb-2"
-                placeholder="Message"
-                autocapitalize="off"
-        >
-        <!-- -------Active Users------- -->
-        <h3>Users</h3><hr>
-        <ul id="ulUsers">
+            <input  type="text"
+                    id="txtMessage"
+                    class="form-control mb-2"
+                    placeholder="Message"
+                    autocapitalize="off"
+            >
+            <!-- -------Active Users------- -->
+            <h3>Users</h3><hr>
+            <ul id="ulUsers" class="list-group">
 
-        </ul>
-    </div>
-    <!-- -------Second div-------- -->
-    <div class="col-md-6  col-sm-6">
-        <h3>Complete chat</h3><hr>
-        <ul id="ulMessages">
+            </ul>
+        </div>
+        <!-- -------Second div-------- -->
+        <div class="col-sm-6">
+            <h3>Complete chat</h3><hr>
+            <ul id="ulMessages" class="list-group">
 
-        </ul>
+            </ul>
+        </div>
     </div>
     <button id="btnLogout" class="btn btn-outline-info">
         Logout

@@ -62,23 +62,75 @@ const connectSocket = async() => {
     });
 
 /* -----------Event custom Listen---------- */
-    socket.on('message-receive', () => {
-        //Todo
+    socket.on('message-receive', (payload) => {
+        listMessages(payload);
     });
 
     socket.on('active-users', (payload) => {
         listUsers(payload);
     });
 
-    socket.on('private-message', () => {
-        //Todo
+    socket.on('private-message', ( payload ) => {
+        console.log('private: ', payload);
     });
 };
 /* -----llist users------ */
 const listUsers = ( users = [] ) =>{
     let usersHTML = '';
+    users.forEach(({ name, uid }) => {
+        usersHTML += `
+            <li>
+                <p>
+                    <h5 class="text-success item">${name}</h5>
+                    <span class="fs-6 text-muted">${uid}</span>
+                </p>
+            </li>
+        `
+    })
+
+    ulUsers.innerHTML = usersHTML;
 };
 
+/* -----list messages------ */
+const listMessages = ( messages = [] ) =>{
+    let messagesHTML = '';
+    messages.forEach(({ name, message }) => {
+        messagesHTML += `
+            <li>
+                <p>
+                    <span class="text-primary item">${name}:</span>
+                    <span class="fs-6">${message}</span>
+                </p>
+            </li>
+        `
+    })
+
+    ulMessages.innerHTML = messagesHTML;
+};
+
+/* -----listener on txtMessage input */
+txtMessage.addEventListener('keyup',({ keyCode }) =>{
+
+    const message = txtMessage.value;
+    const uid     = txtUid.value
+
+    if( keyCode !== 13 ){ return };
+
+    if(message.length <= 0) { return };
+
+    //emit event send-message to server
+    socket.emit('send-message', { message, uid } );
+
+    //clear input txtMessage
+    txtMessage.value = '';
+
+});
+
+/* -----------logout----------- */
+btnLogout.addEventListener('click', () =>{
+    localStorage.removeItem('token');
+    window.location = 'index.html'
+})
 
 /* -----execute */
 const main = async() => {

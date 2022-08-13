@@ -19,7 +19,7 @@ class ChatMessages {
 
     /* --------get the las 20 messages------- */
     get last20() {
-        this.messages = this.messages.splice(0,20);
+        this.messages = this.messages.splice(0,10);
         return this.messages
     };
 
